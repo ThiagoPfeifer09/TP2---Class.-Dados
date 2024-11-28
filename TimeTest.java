@@ -23,7 +23,7 @@ public class TimeTest {
             Graph12 = new Graph(new In(new File("sample500-99800.gr")))
             Graph13 = new Graph(new In(new File("sample500-149700.gr")))
             Graph14 = new Graph(new In(new File("sample500-199600.gr")))
-			Graph15 = new Graph(new In(new File("sample500-249500.gr")))
+	    Graph15 = new Graph(new In(new File("sample500-249500.gr")))
 	
 	    long t_ini, t_fim;
 
