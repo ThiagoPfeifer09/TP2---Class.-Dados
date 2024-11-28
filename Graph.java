@@ -96,22 +96,30 @@ public class Graph {
         return adj.get(v);
     }
 
+    
     // Realiza uma busca em largura (BFS) a partir de um vértice
     public void BFS(int s) {
+        // Inicializa os atributos dos vértices
         for (VertexAttributes attr : atribs) {
             attr.color = Color.WHITE;
             attr.d = INF;
             attr.pred = NIL;
         }
+
+        // Marca o vértice de origem
         atribs.get(s).color = Color.GRAY;
         atribs.get(s).d = 0;
 
         Queue<Integer> queue = new LinkedList<>();
         queue.add(s);
 
+        System.out.println("Iniciando BFS a partir do vértice " + s);
+
+        // Executa a BFS
         while (!queue.isEmpty()) {
             int u = queue.poll();
-            for (int v : adj(u)) {
+            System.out.println("Visitando vértice " + u);  // Print para ver qual vértice está sendo visitado
+            for (int v : adj(u)) {  // Supondo que adj(u) retorna os vizinhos de u
                 if (atribs.get(v).color == Color.WHITE) {
                     atribs.get(v).color = Color.GRAY;
                     atribs.get(v).d = atribs.get(u).d + 1;
@@ -126,11 +134,15 @@ public class Graph {
     // Realiza uma busca em profundidade (DFS)
     public void DFS() {
         time = 0;
+        // Inicializa os atributos dos vértices
         for (VertexAttributes attr : atribs) {
             attr.color = Color.WHITE;
             attr.pred = NIL;
         }
 
+        System.out.println("Iniciando DFS");
+
+        // Executa a DFS para cada vértice não visitado
         for (int i = 0; i < V; i++) {
             if (atribs.get(i).color == Color.WHITE) {
                 DFSVisit(i);
@@ -144,6 +156,10 @@ public class Graph {
         atribs.get(u).d = time;
         atribs.get(u).color = Color.GRAY;
 
+        System.out.println("Visitando vértice " + u + " (DFS)");  // Print para ver qual vértice está sendo visitado na DFS
+        System.out.println("Tempo de descoberta do vértice " + u + ": " + atribs.get(u).d);  // Print do tempo de descoberta
+
+        // Visita os vizinhos do vértice u
         for (int v : adj(u)) {
             if (atribs.get(v).color == Color.WHITE) {
                 atribs.get(v).pred = u;
@@ -151,11 +167,16 @@ public class Graph {
             }
         }
 
+        // Finaliza a visita ao vértice u
         atribs.get(u).color = Color.BLACK;
         time++;
         atribs.get(u).f = time;
-    }
 
+        System.out.println("Finalizando vértice " + u + " (DFS)");  // Print quando finalizar o vértice na DFS
+        System.out.println("Tempo de finalização do vértice " + u + ": " + atribs.get(u).f);  // Print do tempo de finalização
+    }
+    
+    
     // Retorna o status dos atributos dos vértices
     public String StatusAtribs() {
         StringBuilder sb = new StringBuilder("Vertex Attributes (color, pred, d, f):\n");
