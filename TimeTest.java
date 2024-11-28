@@ -1,7 +1,7 @@
 package test;
 
 public class TimeTest {
-    public static void main(String[] args) { 
+    public static void main(String[] args) { //args[0] número do teste
        
         List<Long> Bellman-Ford_Lista = new ArrayList<>();
         List<Long> Bellman-Ford_Matriz = new ArrayList<>();
@@ -197,7 +197,7 @@ public class TimeTest {
             t_fim = System.nanoTime();
             Dijkstral_Lista.add(t_fim - t_ini);
 
-			t_ini = System.nanoTime();
+	    t_ini = System.nanoTime();
             Graph4.Dijkstral_Lista();
             t_fim = System.nanoTime();
             Dijkstral_Lista.add(t_fim - t_ini);
@@ -336,7 +336,7 @@ public class TimeTest {
             Dijkstral_Matriz.add(t_fim - t_ini);
 
        
-        String nomeArquivoCSV = "TemposExecucao.csv";
+        String nomeArquivoCSV = "TemposExecucao_Teste" + args[0] + ".csv";
 
         
         try (PrintWriter writer = new PrintWriter(new File(nomeArquivoCSV))) {
