@@ -1,40 +1,7 @@
 package grafo;
+import tools.In;
 import java.util.*;
 import java.io.*;
-
-// Enumerador para cores de vértices
-enum Color {
-    WHITE, GRAY, BLACK
-}
-
-// Classe para armazenar atributos de vértices
-class VertexAttributes {
-    Color color;
-    int pred;
-    int d; // Tempo de descoberta
-    int f; // Tempo de finalização
-}
-
-// Classe para leitura de arquivos
-class In {
-    Scanner in;
-
-    In(File file) {
-        try {
-            this.in = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("Erro: Arquivo não encontrado.");
-        }
-    }
-
-    boolean hasNextLine() {
-        return in.hasNextLine();
-    }
-
-    String nextLine() {
-        return in.nextLine();
-    }
-}
 
 // Classe principal do grafo
 public class Graph {
@@ -203,7 +170,7 @@ public class Graph {
         return sb.toString();
     }
 
-    public void Bellman_Ford_List(){}
+    public void Bellman_Ford_Lista(){}
     public void Bellman_Ford_Matriz(){}
     public void Dijkstral_Lista(){}
     public void Dijkstral_Matriz(){}

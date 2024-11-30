@@ -1,31 +1,12 @@
-package test;
+package tools;
 import grafo.*;
 import java.util.*;
 import java.io.*;
 
-class In {
-    Scanner in;
-
-    In(File file) {
-        try {
-            this.in = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("Erro: Arquivo não encontrado.");
-        }
-    }
-
-    boolean hasNextLine() {
-        return in.hasNextLine();
-    }
-
-    String nextLine() {
-        return in.nextLine();
-    }
-}
 
 public class TimeTest {
     public static void main(String[] args) {
-        //args[0] grafo para teste
+        //args[0] grafo para teste (1-15)
        //args[1] quantidade de testes
 
 
@@ -35,11 +16,12 @@ public class TimeTest {
         List<Long> Dijkstral_Matriz = new ArrayList<>();
 
       Graph graph;
+      graph = new Graph(new In(new File("sample100-1980.gr")));
 
       switch(Integer.parseInt(args[0])){
 
         case 1:
-            graph = new Graph(new In(new File("sample100-1980.gr")));;
+            graph = new Graph(new In(new File("sample100-1980.gr")));
         break;
         case 2:
             graph = new Graph(new In(new File("sample100-3960.gr")));
@@ -83,7 +65,6 @@ public class TimeTest {
         case 15:
             graph = new Graph(new In(new File("sample500-249500.gr")));
         break;
-
 	}
 
 	int k = 0;
