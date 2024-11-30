@@ -9,37 +9,95 @@ public class Graph {
     static final Integer NIL = -1;
     private int V; // número de vértices
     private int E; // número de arestas
-    private Vector<Vector<Integer>> adj; // listas de adjacência
+    private Vector<Vector<Integer>> adj; // lista de adjacência
+    private int[][] adjMatrix; // matriz de adjacência
     private Vector<VertexAttributes> atribs; // atributos dos vértices
+    private boolean useMatrix; // flag para usar matriz
     private int time; // contador de tempo para DFS
 
     // Construtor para criar grafo vazio
-    public Graph(int V) {
+    public Graph(int V, boolean useMatrix) {
         this.V = V;
         this.E = 0;
-        initializeGraph();
+        this.useMatrix = useMatrix;
+        if (useMatrix) {
+            initializeGraphM();
+        } else {
+            initializeGraph();
+        }
     }
 
     // Construtor para criar grafo a partir de arquivo
-    public Graph(In in) {
-        while (in.hasNextLine()) {
-            String line = in.nextLine().trim();
-
-            if (line.startsWith("c")) {
-                continue; // Ignorar linhas de comentário
-            } else if (line.startsWith("p")) {
-                String[] parts = line.split(" ");
-                this.V = Integer.parseInt(parts[2]);
-                this.E = 0;
-                initializeGraph();
-            } else if (line.startsWith("a")) {
-                String[] parts = line.split(" ");
-                int u = Integer.parseInt(parts[1]) - 1;
-                int v = Integer.parseInt(parts[2]) - 1;
-                addEdge(u, v);
+    public Graph(In in, boolean useMatrix) {
+        this.useMatrix = useMatrix;
+        if (useMatrix) {
+            while (in.hasNextLine()) {
+                String line = in.nextLine().trim();
+                if (line.startsWith("c")) continue;
+                else if (line.startsWith("p")) {
+                    String[] parts = line.split(" ");
+                    this.V = Integer.parseInt(parts[2]);
+                    this.E = 0;
+                    initializeGraphM();
+                } else if (line.startsWith("a")) {
+                    String[] parts = line.split(" ");
+                    int u = Integer.parseInt(parts[1]) - 1;
+                    int v = Integer.parseInt(parts[2]) - 1;
+                    addEdgeM(u, v);
+                }
+            }
+        } else {
+            while (in.hasNextLine()) {
+                String line = in.nextLine().trim();
+                if (line.startsWith("c")) continue;
+                else if (line.startsWith("p")) {
+                    String[] parts = line.split(" ");
+                    this.V = Integer.parseInt(parts[2]);
+                    this.E = 0;
+                    initializeGraph();
+                } else if (line.startsWith("a")) {
+                    String[] parts = line.split(" ");
+                    int u = Integer.parseInt(parts[1]) - 1;
+                    int v = Integer.parseInt(parts[2]) - 1;
+                    addEdge(u, v);
+                }
             }
         }
     }
+
+    // Inicializa as estruturas internas (matriz de adjacência)
+    private void initializeGraphM() {
+        adjMatrix = new int[V][V];
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                adjMatrix[i][j] = 0; // 0 indica ausência de aresta
+            }
+        }
+        atribs = new Vector<>(V);
+        for (int i = 0; i < V; i++) {
+            atribs.add(new VertexAttributes());
+        }
+    }
+
+    // Adiciona uma aresta (matriz de adjacência)
+    public void addEdgeM(int u, int v) {
+        adjMatrix[u][v] = 1; // Altere o peso, se necessário
+        E++;
+    }
+
+
+    // Retorna os vizinhos de um vértice (matriz)
+    public List<Integer> adjM(int v) {
+        List<Integer> neighbors = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            if (adjMatrix[v][i] != 0) { // Considera arestas com peso não nulo
+                neighbors.add(i);
+            }
+        }
+        return neighbors;
+    }
+
+  
 
     // Inicializa as estruturas internas do grafo
     private void initializeGraph() {
@@ -177,40 +235,45 @@ public class Graph {
 
     // Programa principal
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Graph g = null;
-
-        System.out.println("1 - Ler grafo de arquivo");
-        System.out.println("2 - Criar grafo manualmente");
-        int choice = scanner.nextInt();
-
-        if (choice == 1) {
-            System.out.print("Digite o nome do arquivo: ");
-            String fileName = scanner.next();
-            try {
-                g = new Graph(new In(new File(fileName)));
-            } catch (Exception e) {
-                System.out.println("Erro ao ler arquivo.");
-                return;
+            Scanner scanner = new Scanner(System.in);
+            Graph g = null;
+        
+            System.out.println("1 - Ler grafo de arquivo");
+            System.out.println("2 - Criar grafo manualmente");
+            int choice = scanner.nextInt();
+        
+            // Solicitar se deseja usar matriz ou lista
+            System.out.println("1 - Usar matriz de adjacência\n2 - Usar lista de adjacência");
+            int useMatrixChoice = scanner.nextInt();
+            boolean useMatrix = useMatrixChoice == 1;
+        
+            if (choice == 1) {
+                System.out.print("Digite o nome do arquivo: ");
+                String fileName = scanner.next();
+                try {
+                    g = new Graph(new In(new File(fileName)), useMatrix);
+                } catch (Exception e) {
+                    System.out.println("Erro ao ler arquivo.");
+                    return;
+                }
+            } else if (choice == 2) {
+                g = new Graph(4, useMatrix); // Passando o parâmetro useMatrix
+                g.addEdge(0, 1);
+                g.addEdge(1, 2);
+                g.addEdge(2, 3);
             }
-        } else if (choice == 2) {
-            g = new Graph(4);
-            g.addEdge(0, 1);
-            g.addEdge(1, 2);
-            g.addEdge(2, 3);
+        
+            System.out.println("1 - BFS\n2 - DFS");
+            int method = scanner.nextInt();
+            if (method == 1) {
+                System.out.print("Vértice inicial: ");
+                int start = scanner.nextInt();
+                g.BFS(start);
+            } else {
+                g.DFS();
+            }
+        
+            System.out.println(g.StatusAtribs());
+            scanner.close();
         }
-
-        System.out.println("1 - BFS\n2 - DFS");
-        int method = scanner.nextInt();
-        if (method == 1) {
-            System.out.print("Vértice inicial: ");
-            int start = scanner.nextInt();
-            g.BFS(start);
-        } else {
-            g.DFS();
-        }
-
-        System.out.println(g.StatusAtribs());
-        scanner.close();
     }
-}
