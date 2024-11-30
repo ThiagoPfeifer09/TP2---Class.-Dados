@@ -1,3 +1,4 @@
+package grafo;
 import java.util.*;
 import java.io.*;
 
@@ -201,6 +202,11 @@ public class Graph {
         }
         return sb.toString();
     }
+
+    public void Bellman_Ford_List(){}
+    public void Bellman_Ford_Matriz(){}
+    public void Dijkstral_Lista(){}
+    public void Dijkstral_Matriz(){}
 
     // Programa principal
     public static void main(String[] args) {
