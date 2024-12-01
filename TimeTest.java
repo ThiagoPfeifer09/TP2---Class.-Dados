@@ -5,6 +5,8 @@ import java.io.*;
 
 
 public class TimeTest {
+
+
     public static void main(String[] args) {
         //args[0] grafo para teste (1-15)
        //args[1] quantidade de testes
@@ -83,6 +85,8 @@ public class TimeTest {
         break;
 	}
 
+	 List<int[]> edges = graph.getEdgeList();
+
 	int k = 0;
 
 	while(k<Integer.parseInt(args[1])){
@@ -91,7 +95,7 @@ public class TimeTest {
 
             // Bellman-Ford_Lista
             t_ini = System.nanoTime();
-            graph.Bellman_Ford_Lista();
+            graph.Bellman_Ford_Lista(0, edges);
             t_fim = System.nanoTime();
             Bellman_Ford_Lista.add(t_fim - t_ini);
             
@@ -99,7 +103,7 @@ public class TimeTest {
 
             // Bellman-Ford_Matriz
             t_ini = System.nanoTime();
-            graphM.Bellman_Ford_Matriz();
+            graphM.Bellman_Ford_Matriz(0);
             t_fim = System.nanoTime();
             Bellman_Ford_Matriz.add(t_fim - t_ini);
             

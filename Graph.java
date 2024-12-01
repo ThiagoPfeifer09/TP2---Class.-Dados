@@ -240,6 +240,19 @@ public class Graph {
         return sb.toString();
     }
 
+    public List<int[]> getEdgeList() {
+    List<int[]> edges = new ArrayList<>();
+    for (int u = 0; u < this.adj.size(); u++) {
+        for (int v = 0; v < this.adj.get(u).size(); v++) {
+            int weight = this.adj.get(u).get(v);
+            if (weight != 0) {
+                edges.add(new int[]{u, v, weight});
+            }
+        }
+    }
+    return edges;
+}
+
    
 public int[] Bellman_Ford_Lista(int src, List<int[]> edges) {
     int[] dist = new int[V];
