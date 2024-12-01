@@ -3,6 +3,18 @@ import tools.In;
 import java.util.*;
 import java.io.*;
 
+// Enumerador para cores de vértices
+enum Color {
+    WHITE, GRAY, BLACK
+}
+// Classe para armazenar atributos de vértices
+class VertexAttributes {
+    Color color;
+    int pred;
+    int d; // Tempo de descoberta
+    int f; // Tempo de finalização
+}
+
 // Classe principal do grafo
 public class Graph {
     static final Integer INF = Integer.MAX_VALUE;
@@ -228,7 +240,32 @@ public class Graph {
         return sb.toString();
     }
 
-    public void Bellman_Ford_Lista(){}
+   
+public int[] BellmanFordLista(int src, List<int[]> edges) {
+    int[] dist = new int[V];
+    Arrays.fill(dist, INF);
+    dist[src] = 0;
+
+    for (int i = 0; i < V - 1; i++) {
+        for (int[] edge : edges) {
+            int u = edge[0], v = edge[1], weight = edge[2];
+            if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+            }
+        }
+    }
+
+    for (int[] edge : edges) {
+        int u = edge[0], v = edge[1], weight = edge[2];
+        if (dist[u] != INF && dist[u] + weight < dist[v]) {
+            System.out.println("Negative weight cycle detected");
+            return null;
+        }
+    }
+
+    return dist;
+}
+
     public void Bellman_Ford_Matriz(){}
     public void Dijkstral_Lista(){}
     public void Dijkstral_Matriz(){}
