@@ -324,9 +324,9 @@ public int[] Bellman_Ford_Matriz(int src) {
                 }
             } else if (choice == 2) {
                 g = new Graph(4, useMatrix); // Passando o parâmetro useMatrix
-                g.addEdge(0, 1);
-                g.addEdge(1, 2);
-                g.addEdge(2, 3);
+                g.addEdgeM(0, 1);
+                g.addEdgeM(1, 2);
+                g.addEdgeM(2, 3);
             }
         
             System.out.println("1 - BFS\n2 - DFS");
