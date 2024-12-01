@@ -241,7 +241,7 @@ public class Graph {
     }
 
    
-public int[] BellmanFordLista(int src, List<int[]> edges) {
+public int[] Bellman_Ford_Lista(int src, List<int[]> edges) {
     int[] dist = new int[V];
     Arrays.fill(dist, INF);
     dist[src] = 0;
@@ -266,7 +266,36 @@ public int[] BellmanFordLista(int src, List<int[]> edges) {
     return dist;
 }
 
-    public void Bellman_Ford_Matriz(){}
+public int[] Bellman_Ford_Matriz(int src) {
+    // Array para armazenar as distâncias mínimas do vértice fonte para os demais
+    int[] dist = new int[V];
+    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+    dist[src] = 0; // A distância do vértice fonte para si mesmo é 0
+
+    // Relaxa todas as arestas (V - 1) vezes
+    for (int i = 0; i < V - 1; i++) {
+        for (int u = 0; u < V; u++) {
+            for (int v = 0; v < V; v++) {
+                if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
+                    dist[v] = dist[u] + adjMatrix[u][v];
+                }
+            }
+        }
+    }
+
+    // Verifica a existência de ciclos de peso negativo
+    for (int u = 0; u < V; u++) {
+        for (int v = 0; v < V; v++) {
+            if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
+                System.out.println("Ciclo de peso negativo detectado!");
+                return null;
+            }
+        }
+    }
+
+    return dist;
+}
+
     public void Dijkstral_Lista(){}
     public void Dijkstral_Matriz(){}
 
