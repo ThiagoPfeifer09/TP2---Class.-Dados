@@ -309,7 +309,7 @@ public int[] Bellman_Ford_Matriz(int src) {
     return dist;
 }
 
-public void Dijkstral_Lista(int src) {
+public void Dijkstra_Lista(int src) {
     int[] dist = new int[V]; // Array para armazenar a distância mínima
     boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
     Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
@@ -335,8 +335,9 @@ public void Dijkstral_Lista(int src) {
                 }
             }
         }
-    
-public void Dijkstral_Matriz(int src) {
+}
+
+public void Dijkstra_Matriz(int src) {
         int[] dist = new int[V]; // Array para armazenar a distância mínima
         boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
         Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
