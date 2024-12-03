@@ -133,7 +133,7 @@ public class TimeTest {
         
         try (PrintWriter writer = new PrintWriter(new File(nomeArquivoCSV))) {
           
-            writer.print("Algoritmo utilzado");
+            writer.print("Algoritmo utilizado");
             for (int i = 0; i < Integer.parseInt(args[1]); i++) {
                 writer.print(",Teste " + (i + 1));
             }
