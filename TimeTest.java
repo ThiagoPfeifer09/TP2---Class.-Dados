@@ -128,7 +128,7 @@ public class TimeTest {
 
     }
 
-        String nomeArquivoCSV = "arq" + args[0] + ".csv";
+        String nomeArquivoCSV = "tempos/arq" + args[0] + ".csv";
 
         
         try (PrintWriter writer = new PrintWriter(new File(nomeArquivoCSV))) {
