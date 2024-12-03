@@ -308,6 +308,33 @@ public int[] Bellman_Ford_Matriz(int src) {
 
     return dist;
 }
+
+public void Dijkstral_Lista(int src) {
+    int[] dist = new int[V]; // Array para armazenar a distância mínima
+    boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
+    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+    dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
+
+    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+    pq.add(new int[]{src, 0}); // Insere o vértice de origem na fila de prioridade
+
+    while (!pq.isEmpty()) {
+        int[] current = pq.poll();
+        int u = current[0];
+
+        if (visited[u]) continue;
+        visited[u] = true;
+
+            for (int v : adj(u)) {
+                if (!visited[v]) {
+                    int newDist = dist[u] + 1; // Considera peso 1 para arestas sem peso explícito
+                    if (newDist < dist[v]) {
+                        dist[v] = newDist;
+                        pq.add(new int[]{v, dist[v]});
+                    }
+                }
+            }
+        }
     
 public void Dijkstral_Matriz(int src) {
         int[] dist = new int[V]; // Array para armazenar a distância mínima
