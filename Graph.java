@@ -308,9 +308,39 @@ public int[] Bellman_Ford_Matriz(int src) {
 
     return dist;
 }
+    
+public void Dijkstral_Matriz(int src) {
+        int[] dist = new int[V]; // Array para armazenar a distância mínima
+        boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
+        Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+        dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
 
-    public void Dijkstral_Lista(){}
-    public void Dijkstral_Matriz(){}
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[]{src, 0}); // Insere o vértice de origem na fila de prioridade
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int u = current[0];
+
+            if (visited[u]) continue;
+            visited[u] = true;
+
+            for (int v = 0; v < V; v++) {
+                if (!visited[v] && adjMatrix[u][v] != 0) { // Verifica se há aresta entre u e v
+                    int newDist = dist[u] + adjMatrix[u][v];
+                    if (newDist < dist[v]) {
+                        dist[v] = newDist;
+                        pq.add(new int[]{v, dist[v]});
+                    }
+                }
+            }
+        }
+
+        System.out.println("Distâncias mínimas a partir do vértice " + src + ":");
+        for (int i = 0; i < V; i++) {
+            System.out.println("Vértice " + i + ": " + (dist[i] == INF ? "Infinito" : dist[i]));
+        }
+    }
 
     // Programa principal
     public static void main(String[] args) {
