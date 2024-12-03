@@ -253,31 +253,48 @@ public class Graph {
     return edges;
 }
 
-   
 public int[] Bellman_Ford_Lista(int src, List<int[]> edges) {
+    // Determinar o maior índice de vértice
+    int maxIndex = 0;
+    for (int[] edge : edges) {
+        maxIndex = Math.max(maxIndex, Math.max(edge[0], edge[1]));
+    }
+    if (maxIndex >= V) {
+        System.err.println("Vértices fora do intervalo definido! Ajustando...");
+        V = maxIndex + 1; // Ajustar V
+    }
+
+    // Inicializar distâncias
     int[] dist = new int[V];
     Arrays.fill(dist, INF);
     dist[src] = 0;
 
+    // Relaxar arestas
     for (int i = 0; i < V - 1; i++) {
         for (int[] edge : edges) {
             int u = edge[0], v = edge[1], weight = edge[2];
+            if (u < 0 || u >= V || v < 0 || v >= V) {
+                System.err.println("Aresta inválida: (" + u + ", " + v + ")");
+                continue;
+            }
             if (dist[u] != INF && dist[u] + weight < dist[v]) {
                 dist[v] = dist[u] + weight;
             }
         }
     }
 
+    // Verificar ciclos negativos
     for (int[] edge : edges) {
         int u = edge[0], v = edge[1], weight = edge[2];
         if (dist[u] != INF && dist[u] + weight < dist[v]) {
-            System.out.println("Negative weight cycle detected");
+            System.err.println("Ciclo de peso negativo detectado");
             return null;
         }
     }
 
     return dist;
 }
+
 
 public int[] Bellman_Ford_Matriz(int src) {
     // Array para armazenar as distâncias mínimas do vértice fonte para os demais
