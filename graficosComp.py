@@ -31,19 +31,20 @@ def gerar_boxplot(arquivo):
     plt.figure(figsize=(10, 6))
     sns.boxplot(data=boxplot_df, x="Algoritmo", y="Valores")
     plt.title(f"Box Plot para os Algoritmos no Arquivo: {arquivo}")
+    plt.yscale("log")
     plt.ylabel("Valores")
     plt.xlabel("Algoritmos")
     plt.xticks(rotation=45)
     plt.tight_layout()
 
     # Salvar o gráfico como arquivo PNG
-    output_filename = arquivo.replace(".csv", "_boxplot.png")
+    output_filename = arquivo.replace(".csv", "_boxplot.png").replace("tempos/", "graficos/")
     plt.savefig(output_filename)
 
     # Mostrar o gráfico (opcional)
     plt.show()
 
 # Gerar os gráficos para os arquivos especificados e salvar os gráficos
-for arquivo in ['arq5.csv', 'arq10.csv', 'arq15.csv']:
+for arquivo in ['tempos/arq5.csv', 'tempos/arq10.csv', 'tempos/arq15.csv']:
     gerar_boxplot(arquivo)
 

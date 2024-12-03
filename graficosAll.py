@@ -12,7 +12,7 @@ for algoritmo_especifico in algoritmos:
 
     # Loop pelos arquivos (de arq1.csv até arq15.csv)
     for i in range(1, 16):
-        arquivo = f"arq{i}.csv"
+        arquivo = f"tempos/arq{i}.csv"
         try:
             # Carrega o arquivo CSV
             df = pd.read_csv(arquivo, sep=",")  # Ajustado para separador de vírgula
@@ -43,7 +43,7 @@ for algoritmo_especifico in algoritmos:
         plt.tight_layout()
 
         # Salvar o gráfico como arquivo PNG
-        output_filename = f"{algoritmo_especifico.replace(' ', '_')}_boxplot.png"  # Substitui espaços por _ no nome do arquivo
+        output_filename = f"graficos/{algoritmo_especifico.replace(' ', '_')}_boxplot.png"  # Substitui espaços por _ no nome do arquivo
         plt.savefig(output_filename)
 
         # Mostrar o gráfico (opcional)
