@@ -366,6 +366,58 @@ public void Dijkstra_Matriz(int src) {
         }
     }
 
+    public void primMST() {
+        int[] parent = new int[V]; // Array para armazenar a MST
+        int[] key = new int[V]; // Valores de chave para encontrar o menor peso
+        boolean[] mstSet = new boolean[V]; // Conjunto de vértices incluídos na MST
+
+        // Inicializa todas as chaves como infinito
+        Arrays.fill(key, Integer.MAX_VALUE);
+        Arrays.fill(mstSet, false);
+
+        // Começa com o primeiro vértice
+        key[0] = 0;
+        parent[0] = -1;
+
+        for (int count = 0; count < V - 1; count++) {
+            int u = minKey(key, mstSet); // Escolhe o vértice de chave mínima
+            mstSet[u] = true;
+
+            // Atualiza os valores de chave e os pais dos vértices adjacentes
+            for (int v = 0; v < V; v++) {
+                if (adjMatrix[u][v] != 0 && !mstSet[v] && adjMatrix[u][v] < key[v]) {
+                    parent[v] = u;
+                    key[v] = adjMatrix[u][v];
+                }
+            }
+        }
+
+        printMST(parent);
+    }
+
+       // Encontra o vértice com a chave mínima que ainda não está na MST
+       private int minKey(int[] key, boolean[] mstSet) {
+        int min = Integer.MAX_VALUE, minIndex = -1;
+
+        for (int v = 0; v < V; v++) {
+            if (!mstSet[v] && key[v] < min) {
+                min = key[v];
+                minIndex = v;
+            }
+        }
+
+        return minIndex;
+    }
+
+    // Exibe a MST
+    private void printMST(int[] parent) {
+        System.out.println("Aresta\tPeso");
+        for (int i = 1; i < V; i++) {
+            System.out.println(parent[i] + " - " + i + "\t" + adjMatrix[i][parent[i]]);
+        }
+    }
+    
+
     // Programa principal
     public static void main(String[] args) {
             Scanner scanner = new Scanner(System.in);
