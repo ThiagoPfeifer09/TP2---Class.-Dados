@@ -1,4 +1,5 @@
 package grafo;
+
 import tools.In;
 import java.util.*;
 import java.io.*;
@@ -7,6 +8,7 @@ import java.io.*;
 enum Color {
     WHITE, GRAY, BLACK
 }
+
 // Classe para armazenar atributos de vértices
 class VertexAttributes {
     Color color;
@@ -45,7 +47,8 @@ public class Graph {
         if (useMatrix) {
             while (in.hasNextLine()) {
                 String line = in.nextLine().trim();
-                if (line.startsWith("c")) continue;
+                if (line.startsWith("c"))
+                    continue;
                 else if (line.startsWith("p")) {
                     String[] parts = line.split(" ");
                     this.V = Integer.parseInt(parts[2]);
@@ -61,7 +64,8 @@ public class Graph {
         } else {
             while (in.hasNextLine()) {
                 String line = in.nextLine().trim();
-                if (line.startsWith("c")) continue;
+                if (line.startsWith("c"))
+                    continue;
                 else if (line.startsWith("p")) {
                     String[] parts = line.split(" ");
                     this.V = Integer.parseInt(parts[2]);
@@ -97,7 +101,6 @@ public class Graph {
         E++;
     }
 
-
     // Retorna os vizinhos de um vértice (matriz)
     public List<Integer> adjM(int v) {
         List<Integer> neighbors = new ArrayList<>();
@@ -108,8 +111,6 @@ public class Graph {
         }
         return neighbors;
     }
-
-  
 
     // Inicializa as estruturas internas do grafo
     private void initializeGraph() {
@@ -134,7 +135,6 @@ public class Graph {
         return adj.get(v);
     }
 
-    
     // Realiza uma busca em largura (BFS) a partir de um vértice
     public void BFS(int s) {
         // Inicializa os atributos dos vértices
@@ -156,8 +156,8 @@ public class Graph {
         // Executa a BFS
         while (!queue.isEmpty()) {
             int u = queue.poll();
-            System.out.println("Visitando vértice " + u);  // Print para ver qual vértice está sendo visitado
-            for (int v : adj(u)) {  // Supondo que adj(u) retorna os vizinhos de u
+            System.out.println("Visitando vértice " + u); // Print para ver qual vértice está sendo visitado
+            for (int v : adj(u)) { // Supondo que adj(u) retorna os vizinhos de u
                 if (atribs.get(v).color == Color.WHITE) {
                     atribs.get(v).color = Color.GRAY;
                     atribs.get(v).d = atribs.get(u).d + 1;
@@ -194,8 +194,10 @@ public class Graph {
         atribs.get(u).d = time;
         atribs.get(u).color = Color.GRAY;
 
-        System.out.println("Visitando vértice " + u + " (DFS)");  // Print para ver qual vértice está sendo visitado na DFS
-        System.out.println("Tempo de descoberta do vértice " + u + ": " + atribs.get(u).d);  // Print do tempo de descoberta
+        System.out.println("Visitando vértice " + u + " (DFS)"); // Print para ver qual vértice está sendo visitado na
+                                                                 // DFS
+        System.out.println("Tempo de descoberta do vértice " + u + ": " + atribs.get(u).d); // Print do tempo de
+                                                                                            // descoberta
 
         // Visita os vizinhos do vértice u
         for (int v : adj(u)) {
@@ -210,11 +212,11 @@ public class Graph {
         time++;
         atribs.get(u).f = time;
 
-        System.out.println("Finalizando vértice " + u + " (DFS)");  // Print quando finalizar o vértice na DFS
-        System.out.println("Tempo de finalização do vértice " + u + ": " + atribs.get(u).f);  // Print do tempo de finalização
+        System.out.println("Finalizando vértice " + u + " (DFS)"); // Print quando finalizar o vértice na DFS
+        System.out.println("Tempo de finalização do vértice " + u + ": " + atribs.get(u).f); // Print do tempo de
+                                                                                             // finalização
     }
-    
-    
+
     // Retorna o status dos atributos dos vértices
     public String StatusAtribs() {
         StringBuilder sb = new StringBuilder("Vertex Attributes (color, pred, d, f):\n");
@@ -240,113 +242,112 @@ public class Graph {
         return sb.toString();
     }
 
+    public int[] Bellman_Ford_Lista(int src) {
+        int[] dist = new int[V]; // Array para armazenar as distâncias mínimas
+        Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+        dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
 
-public int[] Bellman_Ford_Lista(int src) {
-    int[] dist = new int[V]; // Array para armazenar as distâncias mínimas
-    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
-    dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
-
-    // Relaxa todas as arestas (V - 1) vezes
-    for (int i = 1; i < V; i++) { // Executa V - 1 iterações
-        for (int u = 0; u < V; u++) {
-            for (int v : adj(u)) { // Obtém os vizinhos de u a partir da lista de adjacência
-                // Relaxamento da aresta (u, v)
-                int weight = 1; // Substituir por peso real se necessário
-                if (dist[u] != INF && dist[u] + weight < dist[v]) {
-                    dist[v] = dist[u] + weight;
-                }
-            }
-        }
-    }
-
-    // Verifica a existência de ciclos de peso negativo
-    for (int u = 0; u < V; u++) {
-        for (int v : adj(u)) {
-            int weight = 1; // Substituir por peso real se necessário
-            if (dist[u] != INF && dist[u] + weight < dist[v]) {
-                System.out.println("Ciclo de peso negativo detectado!");
-                return null;
-            }
-        }
-    }
-
-    return dist;
-}
-
-
-
-public int[] Bellman_Ford_Matriz(int src) {
-    // Array para armazenar as distâncias mínimas do vértice fonte para os demais
-    int[] dist = new int[V];
-    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
-    dist[src] = 0; // A distância do vértice fonte para si mesmo é 0
-
-    // Relaxa todas as arestas (V - 1) vezes
-    for (int i = 0; i < V - 1; i++) {
-        for (int u = 0; u < V; u++) {
-            for (int v = 0; v < V; v++) {
-                if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
-                    dist[v] = dist[u] + adjMatrix[u][v];
-                }
-            }
-        }
-    }
-
-    // Verifica a existência de ciclos de peso negativo
-    for (int u = 0; u < V; u++) {
-        for (int v = 0; v < V; v++) {
-            if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
-                System.out.println("Ciclo de peso negativo detectado!");
-                return null;
-            }
-        }
-    }
-
-    return dist;
-}
-
-public void Dijkstra_Lista(int src) {
-    int[] dist = new int[V]; // Array para armazenar a distância mínima
-    boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
-    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
-    dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
-
-    PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-    pq.add(new int[]{src, 0}); // Insere o vértice de origem na fila de prioridade
-
-    while (!pq.isEmpty()) {
-        int[] current = pq.poll();
-        int u = current[0];
-
-        if (visited[u]) continue;
-        visited[u] = true;
-
-            for (int v : adj(u)) {
-                if (!visited[v]) {
-                    int newDist = dist[u] + 1; // Considera peso 1 para arestas sem peso explícito
-                    if (newDist < dist[v]) {
-                        dist[v] = newDist;
-                        pq.add(new int[]{v, dist[v]});
+        // Relaxa todas as arestas (V - 1) vezes
+        for (int i = 1; i < V; i++) { // Executa V - 1 iterações
+            for (int u = 0; u < V; u++) {
+                for (int v : adj(u)) { // Obtém os vizinhos de u a partir da lista de adjacência
+                    // Relaxamento da aresta (u, v)
+                    int weight = 1; // Substituir por peso real se necessário
+                    if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                        dist[v] = dist[u] + weight;
                     }
                 }
             }
         }
-}
 
-public void Dijkstra_Matriz(int src) {
+        // Verifica a existência de ciclos de peso negativo
+        for (int u = 0; u < V; u++) {
+            for (int v : adj(u)) {
+                int weight = 1; // Substituir por peso real se necessário
+                if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                    System.out.println("Ciclo de peso negativo detectado!");
+                    return null;
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    public int[] Bellman_Ford_Matriz(int src) {
+        // Array para armazenar as distâncias mínimas do vértice fonte para os demais
+        int[] dist = new int[V];
+        Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+        dist[src] = 0; // A distância do vértice fonte para si mesmo é 0
+
+        // Relaxa todas as arestas (V - 1) vezes
+        for (int i = 0; i < V - 1; i++) {
+            for (int u = 0; u < V; u++) {
+                for (int v = 0; v < V; v++) {
+                    if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
+                        dist[v] = dist[u] + adjMatrix[u][v];
+                    }
+                }
+            }
+        }
+
+        // Verifica a existência de ciclos de peso negativo
+        for (int u = 0; u < V; u++) {
+            for (int v = 0; v < V; v++) {
+                if (adjMatrix[u][v] != 0 && dist[u] != INF && dist[u] + adjMatrix[u][v] < dist[v]) {
+                    System.out.println("Ciclo de peso negativo detectado!");
+                    return null;
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    public void Dijkstra_Lista(int src) {
         int[] dist = new int[V]; // Array para armazenar a distância mínima
         boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
         Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
         dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
 
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-        pq.add(new int[]{src, 0}); // Insere o vértice de origem na fila de prioridade
+        pq.add(new int[] { src, 0 }); // Insere o vértice de origem na fila de prioridade
 
         while (!pq.isEmpty()) {
             int[] current = pq.poll();
             int u = current[0];
 
-            if (visited[u]) continue;
+            if (visited[u])
+                continue;
+            visited[u] = true;
+
+            for (int v : adj(u)) {
+                if (!visited[v]) {
+                    int newDist = dist[u] + 1; // Considera peso 1 para arestas sem peso explícito
+                    if (newDist < dist[v]) {
+                        dist[v] = newDist;
+                        pq.add(new int[] { v, dist[v] });
+                    }
+                }
+            }
+        }
+    }
+
+    public void Dijkstra_Matriz(int src) {
+        int[] dist = new int[V]; // Array para armazenar a distância mínima
+        boolean[] visited = new boolean[V]; // Array para marcar os vértices visitados
+        Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+        dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
+
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        pq.add(new int[] { src, 0 }); // Insere o vértice de origem na fila de prioridade
+
+        while (!pq.isEmpty()) {
+            int[] current = pq.poll();
+            int u = current[0];
+
+            if (visited[u])
+                continue;
             visited[u] = true;
 
             for (int v = 0; v < V; v++) {
@@ -354,7 +355,7 @@ public void Dijkstra_Matriz(int src) {
                     int newDist = dist[u] + adjMatrix[u][v];
                     if (newDist < dist[v]) {
                         dist[v] = newDist;
-                        pq.add(new int[]{v, dist[v]});
+                        pq.add(new int[] { v, dist[v] });
                     }
                 }
             }
@@ -395,8 +396,8 @@ public void Dijkstra_Matriz(int src) {
         printMST(parent);
     }
 
-       // Encontra o vértice com a chave mínima que ainda não está na MST
-       private int minKey(int[] key, boolean[] mstSet) {
+    // Encontra o vértice com a chave mínima que ainda não está na MST
+    private int minKey(int[] key, boolean[] mstSet) {
         int min = Integer.MAX_VALUE, minIndex = -1;
 
         for (int v = 0; v < V; v++) {
@@ -416,87 +417,195 @@ public void Dijkstra_Matriz(int src) {
             System.out.println(parent[i] + " - " + i + "\t" + adjMatrix[i][parent[i]]);
         }
     }
-    
 
     // Programa principal
     public static void main(String[] args) {
-            Scanner scanner = new Scanner(System.in);
-            Graph g = null;
-        
-            System.out.println("1 - Ler grafo de arquivo");
-            System.out.println("2 - Criar grafo manualmente");
-            int choice = scanner.nextInt();
-        
-            // Solicitar se deseja usar matriz ou lista
-            System.out.println("1 - Usar matriz de adjacência\n2 - Usar lista de adjacência");
-            int useMatrixChoice = scanner.nextInt();
-            boolean useMatrix = useMatrixChoice == 1;
-        
-            if (choice == 1) {
-                System.out.print("Digite o nome do arquivo: ");
-                String fileName = scanner.next();
-                try {
-                    g = new Graph(new In(new File(fileName)), useMatrix);
-                } catch (Exception e) {
-                    System.out.println("Erro ao ler arquivo.");
-                    return;
-                }
-            } else if (choice == 2) {
-                g = new Graph(4, useMatrix); // Passando o parâmetro useMatrix
-                g.addEdgeM(0, 1);
-                g.addEdgeM(1, 2);
-                g.addEdgeM(2, 3);
+        Scanner scanner = new Scanner(System.in);
+        Graph g = null;
+
+        System.out.println("1 - Ler grafo de arquivo");
+        System.out.println("2 - Criar grafo manualmente");
+        int choice = scanner.nextInt();
+
+        // Solicitar se deseja usar matriz ou lista
+        System.out.println("1 - Usar matriz de adjacência\n2 - Usar lista de adjacência");
+        int useMatrixChoice = scanner.nextInt();
+        boolean useMatrix = useMatrixChoice == 1;
+
+        if (choice == 1) {
+            System.out.print("Digite o nome do arquivo: ");
+            String fileName = scanner.next();
+            try {
+                g = new Graph(new In(new File(fileName)), useMatrix);
+            } catch (Exception e) {
+                System.out.println("Erro ao ler arquivo.");
+                return;
             }
-        
-            System.out.println("1 - BFS\n2 - DFS");
-            int method = scanner.nextInt();
-            if (method == 1) {
-                System.out.print("Vértice inicial: ");
-                int start = scanner.nextInt();
-                g.BFS(start);
-            } else {
-                g.DFS();
-            }
-        
-            System.out.println(g.StatusAtribs());
-            scanner.close();
+        } else if (choice == 2) {
+            g = new Graph(4, useMatrix); // Passando o parâmetro useMatrix
+            g.addEdgeM(0, 1);
+            g.addEdgeM(1, 2);
+            g.addEdgeM(2, 3);
         }
 
-        public List<Integer> topologicalSort(int vertices, Object graph) {
-            boolean[] visited = new boolean[vertices];
-            Stack<Integer> stack = new Stack<>();
-
-            if (graph instanceof List) {
-                List<List<Integer>> adjList = (List<List<Integer>>) graph;
-                for (int i = 0; i < vertices; i++) {
-                    if (!visited[i]) dfsList(i, visited, stack, adjList);
-                }
-            } else if (graph instanceof int[][]) {
-                int[][] adjMatrix = (int[][]) graph;
-                for (int i = 0; i < vertices; i++) {
-                    if (!visited[i]) dfsMatrix(i, visited, stack, adjMatrix);
-                }
-            }
-
-            List<Integer> result = new ArrayList<>();
-            while (!stack.isEmpty()) result.add(stack.pop());
-            return result;
+        System.out.println("1 - BFS\n2 - DFS");
+        int method = scanner.nextInt();
+        if (method == 1) {
+            System.out.print("Vértice inicial: ");
+            int start = scanner.nextInt();
+            g.BFS(start);
+        } else {
+            g.DFS();
         }
 
-        private void dfsList(int node, boolean[] visited, Stack<Integer> stack, List<List<Integer>> adjList) {
-            visited[node] = true;
-            for (int neighbor : adjList.get(node)) {
-                if (!visited[neighbor]) dfsList(neighbor, visited, stack, adjList);
-            }
-            stack.push(node);
-        }
-
-        private void dfsMatrix(int node, boolean[] visited, Stack<Integer> stack, int[][] adjMatrix) {
-            visited[node] = true;
-            for (int neighbor = 0; neighbor < adjMatrix.length; neighbor++) {
-                if (adjMatrix[node][neighbor] == 1 && !visited[neighbor]) dfsMatrix(neighbor, visited, stack, adjMatrix);
-            }
-            stack.push(node);
-        }
-
+        System.out.println(g.StatusAtribs());
+        scanner.close();
     }
+
+    public List<Integer> topologicalSort(int vertices, Object graph) {
+        boolean[] visited = new boolean[vertices];
+        Stack<Integer> stack = new Stack<>();
+
+        if (graph instanceof List) {
+            List<List<Integer>> adjList = (List<List<Integer>>) graph;
+            for (int i = 0; i < vertices; i++) {
+                if (!visited[i])
+                    dfsList(i, visited, stack, adjList);
+            }
+        } else if (graph instanceof int[][]) {
+            int[][] adjMatrix = (int[][]) graph;
+            for (int i = 0; i < vertices; i++) {
+                if (!visited[i])
+                    dfsMatrix(i, visited, stack, adjMatrix);
+            }
+        }
+
+        List<Integer> result = new ArrayList<>();
+        while (!stack.isEmpty())
+            result.add(stack.pop());
+        return result;
+    }
+
+    private void dfsList(int node, boolean[] visited, Stack<Integer> stack, List<List<Integer>> adjList) {
+        visited[node] = true;
+        for (int neighbor : adjList.get(node)) {
+            if (!visited[neighbor])
+                dfsList(neighbor, visited, stack, adjList);
+        }
+        stack.push(node);
+    }
+
+    private void dfsMatrix(int node, boolean[] visited, Stack<Integer> stack, int[][] adjMatrix) {
+        visited[node] = true;
+        for (int neighbor = 0; neighbor < adjMatrix.length; neighbor++) {
+            if (adjMatrix[node][neighbor] == 1 && !visited[neighbor])
+                dfsMatrix(neighbor, visited, stack, adjMatrix);
+        }
+        stack.push(node);
+    }
+
+    // Classe auxiliar para arestas
+    class Edge implements Comparable<Edge> {
+        int src, dest, weight;
+
+        Edge(int src, int dest, int weight) {
+            this.src = src;
+            this.dest = dest;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Edge other) {
+            return Integer.compare(this.weight, other.weight);
+        }
+    }
+
+    // Função que retorna a MST usando o algoritmo de Kruskal
+    public void Kruskal() {
+        List<Edge> edges = getEdges(); // Recupera as arestas do grafo
+        Collections.sort(edges); // Ordena as arestas pelo peso
+
+        // Estrutura para encontrar e unir conjuntos
+        int[] parent = new int[V];
+        int[] rank = new int[V];
+        for (int i = 0; i < V; i++) {
+            parent[i] = i; // Inicialmente, cada vértice é seu próprio pai
+            rank[i] = 0;
+        }
+
+        List<Edge> mst = new ArrayList<>();
+        int mstWeight = 0;
+
+        for (Edge edge : edges) {
+            int setU = find(parent, edge.src);
+            int setV = find(parent, edge.dest);
+
+            // Inclui a aresta se não forma ciclo
+            if (setU != setV) {
+                mst.add(edge);
+                mstWeight += edge.weight;
+                union(parent, rank, setU, setV);
+            }
+
+            // Para grafos pequenos, podemos interromper cedo
+            if (mst.size() == V - 1)
+                break;
+        }
+
+        printMST(mst, mstWeight);
+    }
+
+    // Recupera todas as arestas do grafo
+    private List<Edge> getEdges() {
+        List<Edge> edges = new ArrayList<>();
+        if (useMatrix) {
+            for (int u = 0; u < V; u++) {
+                for (int v = 0; v < V; v++) {
+                    if (adjMatrix[u][v] != 0) {
+                        edges.add(new Edge(u, v, adjMatrix[u][v]));
+                    }
+                }
+            }
+        } else {
+            for (int u = 0; u < V; u++) {
+                for (int v : adj.get(u)) {
+                    edges.add(new Edge(u, v, 1)); // Substituir peso real se necessário
+                }
+            }
+        }
+        return edges;
+    }
+
+    // Encontra o conjunto de um elemento x (com compressão de caminho)
+    private int find(int[] parent, int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+
+    // Une dois conjuntos (por rank)
+    private void union(int[] parent, int[] rank, int x, int y) {
+        int rootX = find(parent, x);
+        int rootY = find(parent, y);
+
+        if (rank[rootX] < rank[rootY]) {
+            parent[rootX] = rootY;
+        } else if (rank[rootX] > rank[rootY]) {
+            parent[rootY] = rootX;
+        } else {
+            parent[rootY] = rootX;
+            rank[rootX]++;
+        }
+    }
+
+    // Exibe a MST e seu peso total
+    private void printMST(List<Edge> mst, int weight) {
+        System.out.println("Árvore Geradora Mínima (MST):");
+        for (Edge edge : mst) {
+            System.out.println(edge.src + " - " + edge.dest + " \tPeso: " + edge.weight);
+        }
+        System.out.println("Peso total da MST: " + weight);
+    }
+
+}
