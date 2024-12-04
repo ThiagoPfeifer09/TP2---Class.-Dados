@@ -3,13 +3,13 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # Definir os algoritmos que queremos comparar
-algoritmos = ["Bellman-Ford Lista", "Bellman-Ford Matriz"]
+algoritmos = ["Dijkstra Lista", "Dijkstra Matriz"]
 
 # Inicializar lista para armazenar os dados dos gráficos
 dados_boxplot = []
 
 # Loop pelos arquivos de arq1.csv até arq5.csv
-for i in range(1, 6):  # Para arq1 até arq5
+for i in range(11, 16):  # Para arq1 até arq5
     arquivo = f"tempos/arq{i}.csv"
     try:
         # Carregar o arquivo CSV
@@ -36,7 +36,7 @@ if dados_boxplot:
     sns.boxplot(data=df_boxplot, x="Arquivo", y="Valores", hue="Algoritmo", showfliers=False)
 
     # Personalizar o gráfico
-    plt.title("Comparação de Algoritmos Bellman-Ford (Lista vs Matriz)")
+    plt.title("Comparação de Algoritmos Dijkstra (Lista vs Matriz)")
     plt.ylabel("Tempos de Execução (em milissegundos)")
     plt.xlabel("Arquivos")
     plt.xticks(rotation=45)  # Rotação das etiquetas no eixo X
@@ -44,7 +44,7 @@ if dados_boxplot:
     plt.tight_layout()
 
     # Salvar o gráfico como arquivo PNG
-    output_filename = "graficos/bellmanford_comparacao.png"
+    output_filename = "graficos/Dijkstra_comparacao500.png"
     plt.savefig(output_filename)
 
     # Mostrar o gráfico (opcional)

@@ -37,6 +37,7 @@ for algoritmo_especifico in algoritmos:
         plt.figure(figsize=(16, 8))  # Ajuste do tamanho do gráfico
         sns.boxplot(data=boxplot_df, x="Arquivo", y="Valores")
         plt.title(f"Box Plot por Arquivo para o Algoritmo: {algoritmo_especifico}")
+        plt.yscale("log")
         plt.ylabel("Valores")
         plt.xlabel("Arquivos")
         plt.xticks(rotation=45)  # Rotação das etiquetas no eixo X
