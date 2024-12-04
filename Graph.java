@@ -431,3 +431,40 @@ public void Dijkstra_Matriz(int src) {
             scanner.close();
         }
     }
+
+        public List<Integer> topologicalSort(int vertices, Object graph) {
+            boolean[] visited = new boolean[vertices];
+            Stack<Integer> stack = new Stack<>();
+
+            if (graph instanceof List) {
+                List<List<Integer>> adjList = (List<List<Integer>>) graph;
+                for (int i = 0; i < vertices; i++) {
+                    if (!visited[i]) dfsList(i, visited, stack, adjList);
+                }
+            } else if (graph instanceof int[][]) {
+                int[][] adjMatrix = (int[][]) graph;
+                for (int i = 0; i < vertices; i++) {
+                    if (!visited[i]) dfsMatrix(i, visited, stack, adjMatrix);
+                }
+            }
+
+            List<Integer> result = new ArrayList<>();
+            while (!stack.isEmpty()) result.add(stack.pop());
+            return result;
+        }
+
+        private void dfsList(int node, boolean[] visited, Stack<Integer> stack, List<List<Integer>> adjList) {
+            visited[node] = true;
+            for (int neighbor : adjList.get(node)) {
+                if (!visited[neighbor]) dfsList(neighbor, visited, stack, adjList);
+            }
+            stack.push(node);
+        }
+
+        private void dfsMatrix(int node, boolean[] visited, Stack<Integer> stack, int[][] adjMatrix) {
+            visited[node] = true;
+            for (int neighbor = 0; neighbor < adjMatrix.length; neighbor++) {
+                if (adjMatrix[node][neighbor] == 1 && !visited[neighbor]) dfsMatrix(neighbor, visited, stack, adjMatrix);
+            }
+            stack.push(node);
+        }
