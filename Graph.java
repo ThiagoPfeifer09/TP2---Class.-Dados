@@ -253,47 +253,39 @@ public class Graph {
     return edges;
 }
 
-public int[] Bellman_Ford_Lista(int src, List<int[]> edges) {
-    // Determinar o maior índice de vértice
-    int maxIndex = 0;
-    for (int[] edge : edges) {
-        maxIndex = Math.max(maxIndex, Math.max(edge[0], edge[1]));
-    }
-    if (maxIndex >= V) {
-        System.err.println("Vértices fora do intervalo definido! Ajustando...");
-        V = maxIndex + 1; // Ajustar V
-    }
 
-    // Inicializar distâncias
-    int[] dist = new int[V];
-    Arrays.fill(dist, INF);
-    dist[src] = 0;
+public int[] Bellman_Ford_Lista(int src) {
+    int[] dist = new int[V]; // Array para armazenar as distâncias mínimas
+    Arrays.fill(dist, INF); // Inicializa todas as distâncias como infinito
+    dist[src] = 0; // A distância do vértice de origem para si mesmo é 0
 
-    // Relaxar arestas
-    for (int i = 0; i < V - 1; i++) {
-        for (int[] edge : edges) {
-            int u = edge[0], v = edge[1], weight = edge[2];
-            if (u < 0 || u >= V || v < 0 || v >= V) {
-                System.err.println("Aresta inválida: (" + u + ", " + v + ")");
-                continue;
-            }
-            if (dist[u] != INF && dist[u] + weight < dist[v]) {
-                dist[v] = dist[u] + weight;
+    // Relaxa todas as arestas (V - 1) vezes
+    for (int i = 1; i < V; i++) { // Executa V - 1 iterações
+        for (int u = 0; u < V; u++) {
+            for (int v : adj(u)) { // Obtém os vizinhos de u a partir da lista de adjacência
+                // Relaxamento da aresta (u, v)
+                int weight = 1; // Substituir por peso real se necessário
+                if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                    dist[v] = dist[u] + weight;
+                }
             }
         }
     }
 
-    // Verificar ciclos negativos
-    for (int[] edge : edges) {
-        int u = edge[0], v = edge[1], weight = edge[2];
-        if (dist[u] != INF && dist[u] + weight < dist[v]) {
-            System.err.println("Ciclo de peso negativo detectado");
-            return null;
+    // Verifica a existência de ciclos de peso negativo
+    for (int u = 0; u < V; u++) {
+        for (int v : adj(u)) {
+            int weight = 1; // Substituir por peso real se necessário
+            if (dist[u] != INF && dist[u] + weight < dist[v]) {
+                System.out.println("Ciclo de peso negativo detectado!");
+                return null;
+            }
         }
     }
 
     return dist;
 }
+
 
 
 public int[] Bellman_Ford_Matriz(int src) {
