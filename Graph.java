@@ -422,7 +422,6 @@ public void Dijkstra_Matriz(int src) {
             System.out.println(g.StatusAtribs());
             scanner.close();
         }
-    }
 
         public List<Integer> topologicalSort(int vertices, Object graph) {
             boolean[] visited = new boolean[vertices];
@@ -460,3 +459,5 @@ public void Dijkstra_Matriz(int src) {
             }
             stack.push(node);
         }
+
+    }
