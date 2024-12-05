@@ -367,6 +367,127 @@ public class Graph {
         }
     }
 
+    public void floydWarshall() {
+        // Cria a matriz de distâncias inicial
+        int[][] dist = new int[V][V];
+
+        // Inicializa a matriz de distâncias com os valores da matriz de adjacência
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (i == j) {
+                    dist[i][j] = 0; // Distância de um vértice para ele mesmo é 0
+                } else if (adjMatrix[i][j] != 0) {
+                    dist[i][j] = adjMatrix[i][j]; // Aresta existente
+                } else {
+                    dist[i][j] = INF; // Sem aresta direta
+                }
+            }
+        }
+
+        // Aplica o algoritmo de Floyd-Warshall
+        for (int k = 0; k < V; k++) { // Vértice intermediário
+            for (int i = 0; i < V; i++) { // Vértice de origem
+                for (int j = 0; j < V; j++) { // Vértice de destino
+                    // Se há um caminho mais curto via k, atualiza a distância
+                    if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        // Verifica ciclos negativos
+        for (int i = 0; i < V; i++) {
+            if (dist[i][i] < 0) {
+                System.out.println("Ciclo de peso negativo detectado!");
+                return;
+            }
+        }
+
+        // Imprime a matriz de distâncias
+        System.out.println("Matriz de distâncias mínimas:");
+        for (int i = 0; i < V; i++) {
+            for (int j = 0; j < V; j++) {
+                if (dist[i][j] == INF) {
+                    System.out.print("INF ");
+                } else {
+                    System.out.print(dist[i][j] + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    // Adiciona método para calcular fluxo máximo usando Ford-Fulkerson
+    public int fordFulkerson(int source, int sink) {
+        if (!useMatrix) {
+            throw new UnsupportedOperationException("Ford-Fulkerson só pode ser usado com matriz de adjacência.");
+        }
+
+        // Cria uma matriz residual para armazenar as capacidades residuais do grafo
+        int[][] residualGraph = new int[V][V];
+        for (int u = 0; u < V; u++) {
+            for (int v = 0; v < V; v++) {
+                residualGraph[u][v] = adjMatrix[u][v];
+            }
+        }
+
+        int[] parent = new int[V]; // Para armazenar o caminho aumentante
+        int maxFlow = 0; // Inicializa o fluxo máximo como 0
+
+        // Enquanto existir um caminho aumentante no grafo residual
+        while (bfsForFordFulkerson(residualGraph, source, sink, parent)) {
+            // Encontra a capacidade mínima no caminho encontrado
+            int pathFlow = Integer.MAX_VALUE;
+            for (int v = sink; v != source; v = parent[v]) {
+                int u = parent[v];
+                pathFlow = Math.min(pathFlow, residualGraph[u][v]);
+            }
+
+            // Atualiza as capacidades residuais e o fluxo reverso
+            for (int v = sink; v != source; v = parent[v]) {
+                int u = parent[v];
+                residualGraph[u][v] -= pathFlow;
+                residualGraph[v][u] += pathFlow;
+            }
+
+            // Adiciona o fluxo do caminho ao fluxo máximo
+            maxFlow += pathFlow;
+        }
+
+        return maxFlow;
+    }
+
+    // Implementa BFS para encontrar um caminho aumentante
+    private boolean bfsForFordFulkerson(int[][] residualGraph, int source, int sink, int[] parent) {
+        boolean[] visited = new boolean[V];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(source);
+        visited[source] = true;
+        parent[source] = -1;
+
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+
+            for (int v = 0; v < V; v++) {
+                // Se existe capacidade residual e o vértice v ainda não foi visitado
+                if (!visited[v] && residualGraph[u][v] > 0) {
+                    queue.add(v);
+                    parent[v] = u;
+                    visited[v] = true;
+
+                    // Se alcançamos o vertice sink, retornamos true
+                    if (v == sink) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false; // Não existe caminho aumentante
+    }
+
+
     public void primMST() {
         int[] parent = new int[V]; // Array para armazenar a MST
         int[] key = new int[V]; // Valores de chave para encontrar o menor peso
